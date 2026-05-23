@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String
+  name         String
+  age          Int
+  bio          String   @default("")
+  photoUrl     String   @default("")
+  createdAt    DateTime @default(now())
+
+  swipesGiven    Swipe[]  @relation("swiper")
+  swipesReceived Swipe[]  @relation("swiped")
+  matchesAsUser1 Match[]  @relation("user1")
+  matchesAsUser2 Match[]  @relation("user2")
+}
+
+model Swipe {
+  id        Int      @id @default(autoincrement())
+  swiperId  Int
+  swipedId  Int
+  direction String   // "like" | "dislike"
+  createdAt DateTime @default(now())
+
+  swiper User @relation("swiper", fields: [swiperId], references: [id])
+  swiped User @relation("swiped", fields: [swipedId], references: [id])
+
+  @@unique([swiperId, swipedId])
+}
+
+model Match {
+  id        Int      @id @default(autoincrement())
+  user1Id   Int
+  user2Id   Int
+  createdAt DateTime @default(now())
+
+  user1 User @relation("user1", fields: [user1Id], references: [id])
+  user2 User @relation("user2", fields: [user2Id], references: [id])
+}
