@@ -16,6 +16,7 @@ model User {
   age          Int
   bio          String   @default("")
   photoUrl     String   @default("")
+  gender       String   @default("male")  // "male" | "female"
   createdAt    DateTime @default(now())
 
   swipesGiven    Swipe[]  @relation("swiper")

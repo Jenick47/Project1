@@ -43,8 +43,13 @@ router.post('/me/photo', authMiddleware, upload.single('photo'), async (req: Aut
   res.json({ photoUrl: user.photoUrl });
 });
 
-// GET /api/profiles/candidates  — все пользователи кроме меня и уже свайпнутых
+// GET /api/profiles/candidates  — противоположный пол, ещё не свайпнутые
 router.get('/candidates', authMiddleware, async (req: AuthRequest, res: Response): Promise<void> => {
+  const me = await prisma.user.findUnique({ where: { id: req.userId } });
+  if (!me) { res.status(404).json({ error: 'User not found' }); return; }
+
+  const oppositeGender = me.gender === 'male' ? 'female' : 'male';
+
   const alreadySwiped = await prisma.swipe.findMany({
     where: { swiperId: req.userId },
     select: { swipedId: true },
@@ -52,7 +57,10 @@ router.get('/candidates', authMiddleware, async (req: AuthRequest, res: Response
   const excludeIds = [req.userId as number, ...alreadySwiped.map((s) => s.swipedId)];
 
   const candidates = await prisma.user.findMany({
-    where: { id: { notIn: excludeIds } },
+    where: {
+      id: { notIn: excludeIds },
+      gender: oppositeGender,
+    },
     select: { id: true, name: true, age: true, bio: true, photoUrl: true },
   });
   res.json(candidates);

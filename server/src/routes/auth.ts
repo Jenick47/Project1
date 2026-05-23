@@ -7,10 +7,14 @@ const router = Router();
 
 // POST /api/auth/register
 router.post('/register', async (req: Request, res: Response): Promise<void> => {
-  const { email, password, name, age, bio } = req.body;
+  const { email, password, name, age, bio, gender } = req.body;
 
-  if (!email || !password || !name || !age) {
-    res.status(400).json({ error: 'email, password, name and age are required' });
+  if (!email || !password || !name || !age || !gender) {
+    res.status(400).json({ error: 'email, password, name, age and gender are required' });
+    return;
+  }
+  if (!['male', 'female'].includes(gender)) {
+    res.status(400).json({ error: 'gender must be "male" or "female"' });
     return;
   }
 
@@ -23,7 +27,7 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
   const passwordHash = await bcrypt.hash(password, 10);
 
   const user = await prisma.user.create({
-    data: { email, passwordHash, name, age: Number(age), bio: bio || '' },
+    data: { email, passwordHash, name, age: Number(age), bio: bio || '', gender },
   });
 
   const token = jwt.sign(

@@ -78,6 +78,33 @@ body {
 .auth-card p { margin-top: 16px; color: #666; }
 .auth-card a { color: #e91e63; text-decoration: none; font-weight: 600; }
 
+.gender-select {
+  display: flex;
+  gap: 10px;
+}
+.gender-option {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  color: #555;
+  transition: all .2s;
+  user-select: none;
+}
+.gender-option input[type="radio"] { display: none; }
+.gender-option.active {
+  border-color: #e91e63;
+  background: rgba(233,30,99,.07);
+  color: #e91e63;
+}
+
 /* ── Profile page ── */
 .page { min-height: 100vh; background: #f7f7f7; }
 .profile-container {
