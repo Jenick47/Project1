@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../api';
-import { Match } from '../types';
+import type { Match } from '../types';
 
 const PLACEHOLDER = 'https://via.placeholder.com/80x80?text=?';
 

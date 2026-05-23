@@ -1,7 +1,7 @@
 import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../api';
-import { User } from '../types';
+import type { User } from '../types';
 import toast from 'react-hot-toast';
 
 const PLACEHOLDER = 'https://via.placeholder.com/300x300?text=No+Photo';
